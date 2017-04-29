@@ -12,10 +12,11 @@ function rand(from, to) {
 }
 handlers.PurchaseCharacter = function (args) {
     log.info("PlayFabId " + currentPlayerId);
-    log.info("ClassType " + args.ClassType);
-    log.info("ClassStatus " + args.ClassStatus);
-    var classType = args.ClassType;
-
+    log.info("ShipType " + args.ShipType);
+    log.info("ShipRankType " + args.ShipRankType);
+    var shipType = args.ShipType;
+    var shipRankType = args.ShipRankType;
+    var shipName = shipType + "_" + shipRankType;
     var gemPrice = args.GemPrice;
     log.info("gemPrice " + gemPrice);
     var allChars = server.GetAllUsersCharacters({
@@ -41,59 +42,59 @@ handlers.PurchaseCharacter = function (args) {
     var grantCharResult = server.GrantCharacterToUser({
         "PlayFabId": currentPlayerId,
         "CatalogVersion": catalogVersion,
-        "CharacterName": classType,
-        "CharacterType": classType,
-        "ItemId": classType
+        "CharacterName": shipName,
+        "CharacterType": shipType,
+        "ItemId": shipName
     });
     var characterId = grantCharResult.CharacterId;
     log.info("characterId " + characterId);
-    var classStatus = JSON.parse(args.ClassStatus);
-    var luck = classStatus["Luck"];
-    delete classStatus.Luck;
-    server.UpdateCharacterData({
-        "PlayFabId": currentPlayerId,
-        "CharacterId": characterId,
-        "Data": classStatus
-    });
-    var isActive = allChars.Characters.length <= 1;
-    var isLeader = allChars.Characters.length == 0;
-    server.UpdateCharacterData({
-        "PlayFabId": currentPlayerId,
-        "CharacterId": characterId,
-        "Data": { "Luck": luck, "IsActive": isActive, "IsLeader": isLeader, "Level": 0}
-    });
-    server.UpdateCharacterData({
-        "PlayFabId": currentPlayerId,
-        "CharacterId": characterId,
-        "Data": { "SoulAttackLevel": 0, "SoulHitPointLevel": 0 }
-    });
-    var itemId = "";
-    if (classType == "Rogue") {
-        itemId = "Dagger_00";
-    }
-    else if (classType == "Hunter") {
-        itemId = "Bow_00";
-    }
-    else if (classType == "Warrior" || classType == "SpellSword" || classType == "Paladin") {
-        itemId = "TwoHandSword_00";
-    }
-    else if (classType == "Sorcerer" || classType == "Warlock" || classType == "Priest") {
-        itemId = "Staff_00";
-    }
+    //var classStatus = JSON.parse(args.ClassStatus);
+    //var luck = classStatus["Luck"];
+    //delete classStatus.Luck;
+    //server.UpdateCharacterData({
+    //    "PlayFabId": currentPlayerId,
+    //    "CharacterId": characterId,
+    //    "Data": classStatus
+    //});
+    //var isActive = allChars.Characters.length <= 1;
+    //var isLeader = allChars.Characters.length == 0;
+    //server.UpdateCharacterData({
+    //    "PlayFabId": currentPlayerId,
+    //    "CharacterId": characterId,
+    //    "Data": { "Luck": luck, "IsActive": isActive, "IsLeader": isLeader, "Level": 0}
+    //});
+    //server.UpdateCharacterData({
+    //    "PlayFabId": currentPlayerId,
+    //    "CharacterId": characterId,
+    //    "Data": { "SoulAttackLevel": 0, "SoulHitPointLevel": 0 }
+    //});
+    //var itemId = "";
+    //if (classType == "Rogue") {
+    //    itemId = "Dagger_00";
+    //}
+    //else if (classType == "Hunter") {
+    //    itemId = "Bow_00";
+    //}
+    //else if (classType == "Warrior" || classType == "SpellSword" || classType == "Paladin") {
+    //    itemId = "TwoHandSword_00";
+    //}
+    //else if (classType == "Sorcerer" || classType == "Warlock" || classType == "Priest") {
+    //    itemId = "Staff_00";
+    //}
 
-    log.info("itemId " + itemId);
-    var itemGrantResult = server.GrantItemsToCharacter({
-        "Annotation": "Char Creation Basic Item",
-        "CatalogVersion": catalogVersion,
-        "PlayFabId": currentPlayerId,
-        "CharacterId": characterId,
-        "ItemIds": [itemId]
-    });
-    log.info("grantItemResult " + JSON.stringify(itemGrantResult));
-    var grantedItems = itemGrantResult["ItemGrantResults"];
-    for (var i = 0; i < grantedItems.length; i++) {
-        updateItemData(grantedItems[i], characterId);
-    }
+    //log.info("itemId " + itemId);
+    //var itemGrantResult = server.GrantItemsToCharacter({
+    //    "Annotation": "Char Creation Basic Item",
+    //    "CatalogVersion": catalogVersion,
+    //    "PlayFabId": currentPlayerId,
+    //    "CharacterId": characterId,
+    //    "ItemIds": [itemId]
+    //});
+    //log.info("grantItemResult " + JSON.stringify(itemGrantResult));
+    //var grantedItems = itemGrantResult["ItemGrantResults"];
+    //for (var i = 0; i < grantedItems.length; i++) {
+    //    updateItemData(grantedItems[i], characterId);
+    //}
     return { "CharacterId": characterId };
 };
 handlers.KilledMob = function (args)
