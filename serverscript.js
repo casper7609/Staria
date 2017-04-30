@@ -56,13 +56,13 @@ handlers.PurchaseCharacter = function (args) {
     //    "CharacterId": characterId,
     //    "Data": classStatus
     //});
-    //var isActive = allChars.Characters.length <= 1;
-    //var isLeader = allChars.Characters.length == 0;
-    //server.UpdateCharacterData({
-    //    "PlayFabId": currentPlayerId,
-    //    "CharacterId": characterId,
-    //    "Data": { "Luck": luck, "IsActive": isActive, "IsLeader": isLeader, "Level": 0}
-    //});
+    var isActive = allChars.Characters.length <= 1;
+    var isLeader = allChars.Characters.length == 0;
+    server.UpdateCharacterData({
+        "PlayFabId": currentPlayerId,
+        "CharacterId": characterId,
+        "Data": { "Luck": luck, "IsActive": isActive, "IsLeader": isLeader, "Level": 0}
+    });
     //server.UpdateCharacterData({
     //    "PlayFabId": currentPlayerId,
     //    "CharacterId": characterId,
