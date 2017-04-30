@@ -61,7 +61,7 @@ handlers.PurchaseCharacter = function (args) {
     server.UpdateCharacterData({
         "PlayFabId": currentPlayerId,
         "CharacterId": characterId,
-        "Data": { "Luck": luck, "IsActive": isActive, "IsLeader": isLeader, "Level": 0}
+        "Data": { "IsActive": isActive, "IsLeader": isLeader, "Level": 0}
     });
     //server.UpdateCharacterData({
     //    "PlayFabId": currentPlayerId,
