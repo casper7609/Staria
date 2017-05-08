@@ -47,7 +47,7 @@ function purchaseChar(args)
         "PlayFabId": currentPlayerId,
         "CatalogVersion": catalogVersion,
         "CharacterName": shipName,
-        "CharacterType": shipType,
+        "CharacterType": shipName,
         "ItemId": shipName
     });
     var characterId = grantCharResult.CharacterId;
