@@ -10,17 +10,14 @@ var lpDefault = 20;
 function rand(from, to) {
     return Math.floor((Math.random() * to) + from);
 }
-function purchaseChar(args)
-{
+handlers.PurchaseCharacter = function (args) {
+    log.info("PlayFabId " + currentPlayerId);
+    log.info("ShipType " + args.ShipType);
+    log.info("ShipRankType " + args.ShipRankType);
     var shipType = args.ShipType;
     var shipRankType = args.ShipRankType;
     var shipName = shipType + "_" + shipRankType;
     var gemPrice = args.GemPrice;
-
-    if (args.IsSummon) {
-        shipName = args.ShipName;
-        gemPrice = 0;
-    }
 
     log.info("gemPrice " + gemPrice);
     var allChars = server.GetAllUsersCharacters({
@@ -68,12 +65,6 @@ function purchaseChar(args)
         "Data": { "IsActive": isActive, "IsLeader": isLeader, "Level": 0, "Population": 2 }
     });
     return { "CharacterId": characterId };
-}
-handlers.PurchaseCharacter = function (args) {
-    log.info("PlayFabId " + currentPlayerId);
-    log.info("ShipType " + args.ShipType);
-    log.info("ShipRankType " + args.ShipRankType);
-    return purchaseChar(args);
 };
 handlers.KilledMob = function (args)
 {
@@ -795,17 +786,6 @@ handlers.UpdateSummonItemData = function (args) {
     }
     var result = {};
     result.Items = realItems;
-    return result;
-};
-handlers.GrantSummonedCharacters = function (args) {
-    log.info("PlayFabId " + args.PlayFabId);
-    var items = args.Items;
-    var realItems = [];
-    for (var i = 0; i < items.length; i++) {
-        var arg = { "ShipName": items[i].ItemId, "GemPrice": 0, "IsSummon": true};
-        purchaseChar(arg);
-    }
-    var result = {};
     return result;
 };
 handlers.MassiveSoul = function (args) {
