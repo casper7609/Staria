@@ -18,6 +18,13 @@ handlers.PurchaseCharacter = function (args) {
     var shipRankType = args.ShipRankType;
     var shipName = shipType + "_" + shipRankType;
     var gemPrice = args.GemPrice;
+
+    if (args.IsSummon)
+    {
+        shipName = args.ShipName;
+        gemPrice = 0;
+    }
+
     log.info("gemPrice " + gemPrice);
     var allChars = server.GetAllUsersCharacters({
         "PlayFabId": currentPlayerId
@@ -61,40 +68,8 @@ handlers.PurchaseCharacter = function (args) {
     server.UpdateCharacterData({
         "PlayFabId": currentPlayerId,
         "CharacterId": characterId,
-        "Data": { "IsActive": isActive, "IsLeader": isLeader, "Level": 0}
+        "Data": { "IsActive": isActive, "IsLeader": isLeader, "Level": 0, "Population":2}
     });
-    //server.UpdateCharacterData({
-    //    "PlayFabId": currentPlayerId,
-    //    "CharacterId": characterId,
-    //    "Data": { "SoulAttackLevel": 0, "SoulHitPointLevel": 0 }
-    //});
-    //var itemId = "";
-    //if (classType == "Rogue") {
-    //    itemId = "Dagger_00";
-    //}
-    //else if (classType == "Hunter") {
-    //    itemId = "Bow_00";
-    //}
-    //else if (classType == "Warrior" || classType == "SpellSword" || classType == "Paladin") {
-    //    itemId = "TwoHandSword_00";
-    //}
-    //else if (classType == "Sorcerer" || classType == "Warlock" || classType == "Priest") {
-    //    itemId = "Staff_00";
-    //}
-
-    //log.info("itemId " + itemId);
-    //var itemGrantResult = server.GrantItemsToCharacter({
-    //    "Annotation": "Char Creation Basic Item",
-    //    "CatalogVersion": catalogVersion,
-    //    "PlayFabId": currentPlayerId,
-    //    "CharacterId": characterId,
-    //    "ItemIds": [itemId]
-    //});
-    //log.info("grantItemResult " + JSON.stringify(itemGrantResult));
-    //var grantedItems = itemGrantResult["ItemGrantResults"];
-    //for (var i = 0; i < grantedItems.length; i++) {
-    //    updateItemData(grantedItems[i], characterId);
-    //}
     return { "CharacterId": characterId };
 };
 handlers.KilledMob = function (args)
@@ -817,6 +792,17 @@ handlers.UpdateSummonItemData = function (args) {
     }
     var result = {};
     result.Items = realItems;
+    return result;
+};
+handlers.GrantSummonedCharacters = function (args) {
+    log.info("PlayFabId " + args.PlayFabId);
+    var items = args.Items;
+    var realItems = [];
+    for (var i = 0; i < items.length; i++) {
+        var arg = { "ShipName": items[i].ItemId, "GemPrice": 0, "IsSummon": true};
+        PurchaseCharacter(arg);
+    }
+    var result = {};
     return result;
 };
 handlers.MassiveSoul = function (args) {
