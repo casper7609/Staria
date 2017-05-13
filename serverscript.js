@@ -938,7 +938,8 @@ handlers.CreateProvision = function (args) {
         }
     }
     for (var k = 0; k < itemsToConsume.length; k++) {
-        var userInventory = server.ConsumeItem({
+        server.ConsumeItem({
+            "PlayFabId": currentPlayerId,
             "ItemInstanceId": itemsToConsume[k].ItemInstanceId,
             "ConsumeCount": itemsToConsume[k].Count
         });
