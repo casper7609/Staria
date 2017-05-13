@@ -948,7 +948,7 @@ handlers.CreateProvision = function (args) {
         {
             "PlayFabId": currentPlayerId,
             "VirtualCurrency": "FP",
-            "Amount": ProvisionAmount
+            "Amount": parseInt(args.ProvisionAmount)
         }
     );
     return {};
