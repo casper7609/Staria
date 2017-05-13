@@ -921,6 +921,7 @@ handlers.MapQuestReward = function (args) {
 };
 handlers.CreateProvision = function (args) {
     var itemsToConsume = JSON.parse(args.ItemsToConsume);
+    var currencyToGain = JSON.parse(args.CurrencyToGain);
     var userInventory = server.GetUserInventory({
         "PlayFabId": currentPlayerId
     });
@@ -947,8 +948,8 @@ handlers.CreateProvision = function (args) {
     server.AddUserVirtualCurrency(
         {
             "PlayFabId": currentPlayerId,
-            "VirtualCurrency": "FP",
-            "Amount": parseInt(args.ProvisionAmount)
+            "VirtualCurrency": currencyToGain.CurrencyType,
+            "Amount": parseInt(currencyToGain.Count)
         }
     );
     return {};
