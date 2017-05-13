@@ -919,3 +919,36 @@ handlers.MapQuestReward = function (args) {
 	);
     return {};
 };
+handlers.CreateProvision = function (args) {
+    var itemsToConsume = JSON.parse(args.ItemsToConsume);
+    var userInventory = server.GetUserInventory({
+        "PlayFabId": currentPlayerId
+    });
+    var inventory = userInventory.Inventory;
+    for (var i = 0; i < inventory.length; i++)
+    {
+        for (var k = 0; k < itemsToConsume.length; k++)
+        {
+            if (inventory[i].ItemInstanceId == itemsToConsume[k].ItemInstanceId 
+                && inventory[i].RemainingUses < itemsToConsume[k].Count
+                )
+            {
+                return { "Error": "Insufficient Fund" };
+            }
+        }
+    }
+    for (var k = 0; k < itemsToConsume.length; k++) {
+        var userInventory = server.ConsumeItem({
+            "ItemInstanceId": itemsToConsume[k].ItemInstanceId,
+            "ConsumeCount": itemsToConsume[k].Count
+        });
+    }
+    server.AddUserVirtualCurrency(
+        {
+            "PlayFabId": currentPlayerId,
+            "VirtualCurrency": "FP",
+            "Amount": ProvisionAmount
+        }
+    );
+    return {};
+};
